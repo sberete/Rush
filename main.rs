@@ -21,45 +21,42 @@ fn  check_args(c: &str) -> bool
 
 fn algorithm(c: &str, map: &HashMap<String, String>, _len: usize) 
 {
-    // 123
-    // let  mut i: usize = len;
-
     if c.len() == 3
     { 
-        if let Some(first_char) = c.chars().next() 
+        let mut chars = c.chars();
+
+        if let Some(first_char) = chars.next() && first_char.to_string() != "1"
         {
             let key = first_char.to_string();
             
-            if let Some(value) = map.get(&key) {
-                println!("{}", value);
+            if  let Some(value) = map.get(&key) 
+            {
+                print!("{} ", value);
             }
         }
-
-        if map.contains_key(&c.to_string())
+        let result: String = c.chars().skip(1).take(2).collect();
+        let results: String = c.chars().skip(2).take(1).collect();
+        if map.contains_key(&result.to_string())
         {
-            let value = map.get(&c.to_string()).unwrap();
+            let value = map.get(&result.to_string()).unwrap();
+            print!("cent ");
             println!("{}", value);
         }
-            // let nbr =  caractere.parse::<i32>().unwrap();
-        // println!("{res}");
-        // for caractere in c.chars()
-        // {
-        //     // let nbr: usize = caractere.parse().unwrap();
-
-        //     let  nbr = (caractere.to_string()).parse::<usize>().unwrap();
-        //     let  res = nbr * pow(10, i);
-            
-        //     i -= 1;
-        // }
-
+        else if map.contains_key(&results.to_string())
+        {
+            let value = map.get(&results.to_string()).unwrap();
+            print!("cent ");
+            println!("{}", value);
+        }
+        else 
+        {
+            println!("cents");
+        }
     }
-
 }
-
 fn main()
 {
     let args: Vec<String> = env::args().collect();
-
     // println!("{:?}", args);
     if args.len() != 2 ||!check_args(&args[1])
     {
