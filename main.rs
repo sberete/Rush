@@ -21,12 +21,13 @@ fn  check_args(c: &str) -> bool
     true
 }
 
-fn algorithm(c: &str, map: &HashMap<String, String>, _len: usize) 
+fn algorithm(c: &str, map: &HashMap<String, String>, len: usize) 
 {
     if c.len() == 3
     { 
         let mut chars = c.chars();
-
+        if &c[0..3] == "000"
+            {return ;}
         if let Some(first_char) = chars.next() 
         {
             if first_char.to_string() != "1" && first_char.to_string() != "0"
@@ -40,33 +41,58 @@ fn algorithm(c: &str, map: &HashMap<String, String>, _len: usize)
             }
         }
 
-        let result: String = c.chars().skip(1).take(2).collect();
-        let results: String = c.chars().skip(2).take(1).collect();
+        // let result: String = c.chars().skip(1).take(2).collect();
+        let result = (&c[1..3]).to_string();
+        // println!("\n{:?}", result);
+        let results = (&c[2..3]).to_string();
+        // println!("{:?}", results);
 
-        if map.contains_key(&result.to_string())
+        // let results: String = c.chars().skip(2).take(1).collect();
+
+
+        if map.contains_key(&result)
         {
-            let value = map.get(&result.to_string()).unwrap();
-            print!("cent ");
+            let value = map.get(&result).unwrap();
+            if &c[0..1] != "0"
+               { print!("cent ");}
             print!("{} ", value);
         }
-        else if map.contains_key(&results.to_string())
+        else if map.contains_key(&results)
         {
-            let value = map.get(&results.to_string()).unwrap();
-            print!("cent ");
+            let value = map.get(&results).unwrap();
+            if &c[0..2] != "00"
+               { print!("cent ");}
+            if &c[1..3] == "00"
+            {return ;}
             print!("{} ", value);
         }
         else 
         {
-            println!("cents");
+            print!("cents");
         }
     }
-    else 
+    else if c.len() == 2
     {
-        if map.contains_key(&c.to_string())
+        let result = (&c[0..2]).to_string();
+            
+
+        if map.contains_key(&result.to_string())
         {
-            let value = map.get(&c.to_string()).unwrap();
-            print!("{} ", value);
+            let value = map.get(&result.to_string()).unwrap();
+                print!("{} ", value);
         }
+
+    }
+    else {
+        let results = (&c[0..1]).to_string();
+
+            if   map.contains_key(&results.to_string())
+        {
+            let value = map.get(&results.to_string()).unwrap();
+            if len > 3
+                {print!("{} ", value);}
+        }
+
     }
 }
 
@@ -85,20 +111,20 @@ fn main()
     // println!("{:?}", file);
     let file = BufReader::new(file);
     let mut map = HashMap::new();
-let puissance = HashMap::from([
-    (3, "mille"),
-    (6, "million"),
-    (9, "milliard"),
-    (12, "billion"),
-    (15, "billiard"),
-    (18, "trillion"),
-    (21, "trilliard"),
-    (24, "quadrillion"),
-    (27, "quadrilliard"),
-    (30, "quintillion"),
-    (33, "quintilliard"),
-    (36, "sextillion"),
-]);
+    let puissance = HashMap::from([
+        (3, "mille"),
+        (6, "million"),
+        (9, "milliard"),
+        (12, "billion"),
+        (15, "billiard"),
+        (18, "trillion"),
+        (21, "trilliard"),
+        (24, "quadrillion"),
+        (27, "quadrilliard"),
+        (30, "quintillion"),
+        (33, "quintilliard"),
+        (36, "sextillion"),
+    ]);
     for line in file.lines() 
     {
         let l = line.unwrap();
@@ -110,7 +136,7 @@ let puissance = HashMap::from([
     if map.contains_key(&args[1])
     {
         let value = map.get(&args[1]).unwrap();
-        println!("{}", value);
+        print!("{}", value);
     }
     else
     {
@@ -119,6 +145,12 @@ let puissance = HashMap::from([
         let v_iter = vec.iter();
         for i in v_iter
         {
+            if i == "000"
+            {
+                if len != 0
+                    {len -= 3;}
+                continue;
+            }
             algorithm(&i, &map, len);
             if puissance.contains_key(&len)
             {
@@ -128,7 +160,10 @@ let puissance = HashMap::from([
             if len != 0
                 {len -= 3;}
         }
+
     }
+    println!("");
+
 }
 
 
